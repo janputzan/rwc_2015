@@ -1,5 +1,6 @@
 <?php
 
+
 	spl_autoload_register(function ($class) {
 		include $class . '.php';
 	});
@@ -36,5 +37,4 @@
 	header('Content-Type: application/json');
 
 	echo json_encode($response);
-	
 ?>

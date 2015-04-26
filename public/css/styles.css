@@ -376,7 +376,7 @@ nav ul a {
 }
 
 
-.pool-card > div > p:nth-child(odd) {
+.pool-card > div > p:nth-child(even) {
 
 	background-color: rgba(46, 204, 113, 0.5);
 }
