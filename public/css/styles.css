@@ -1,3 +1,6 @@
+body {
+	font-family: Abel
+}
 .left-side {
 	height: 90vh;
 	background-color: #2F8CC7;
@@ -37,11 +40,11 @@ nav ul a {
 	/*padding-top: 20px;
 	padding-bottom: 20px;*/
 }
-.slide {
+.slideMe {
 	position: relative;
 	top: 30px;
 }
-.slide > img {
+.slideMe > img {
 	width: 100%;
 	margin: auto;
 }
@@ -53,9 +56,138 @@ nav ul a {
 	top: 7px;
 	left: 5px;
 }
-.slide .controls {
+.slideMe .controls {
 	width: 165px;
 	margin: auto;
 	position: relative;
 	top: 0px;
+}
+
+#preloader {
+	position: absolute;
+	z-index: 9999;
+	background-color: #fff;
+	/*opacity: 0.5;*/
+	width: 100%;
+	height: 100%;
+}
+
+#preloader div {
+	position: relative;
+	top: 35vh;
+	left: 45vw;
+}
+
+#preloader2 {
+	position: absolute;
+	display: none;
+	top: 30%;
+	left: 40%;
+}
+
+.left-side li.active {
+	background-color: #246997;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.image-container img {
+
+	height: 100px;
+	width: 100px;
+}
+
+.team-card {
+	display: inline-block;
+	padding: 5px;
+	cursor: pointer;
+}
+
+#sideContent {
+	overflow-y: auto;
+	height: 85%;
+}
+
+.info-container {
+	padding: 5px;
+	color: #fff;
+}
+
+.info-container p:first-child {
+	font-weight: bold;
+	font-size: large;
+}
+.resultsContainer > .results > p > span {
+	padding-left: 10px;
+}
+
+.resultsContainer > p:first-child {
+
+	font-size: medium;
+	font-weight: bold;
+	color: #fff;
+}
+
+.resultsContainer .score {
+
+	text-align: center;
+	width: 150px;
+	height: 25px;
+	border-radius: 10px;
+	margin: auto;
+	color: #fff;
+}
+
+.resultsContainer .score.win {
+
+	background-color: #F9BF3B;
+}
+
+.resultsContainer .score.lost {
+
+	background-color: #E74C3C;
+}
+
+.resultsContainer .score.draw {
+
+	background-color: #87D37C;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+ 
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 4px rgba(0,0,0,0.3); 
+  border-radius: 8px;
+}
+ 
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(0,0,0,0.3);
+}
+
+.name-hover {
+
+	display: none;
+	position: relative;
+}
+.name-hover p {
+	width: 100px;
+	height: 100px;
+	position: absolute;
+	top: -121px;
+	background-color: #fff;
+}
+
+.name-hover p > span {
+
+	display: block;
+	color: #000;
+	text-align: center;
+}
+.name-hover p > span:last-child {
+	position: relative;
+	bottom: -40px;
+	font-size: small;
 }
