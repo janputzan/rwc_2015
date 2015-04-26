@@ -51,7 +51,7 @@ abstract class Model extends Database {
 
 	public function findAll($columnName, $value) {
 
-		$sql = "SELECT * FROM $this->table WHERE $columnName = '$value'";
+		$sql = "SELECT * FROM $this->table WHERE $columnName = '$value' ORDER BY id DESC";
 
 		return $this->all($sql);
 	}

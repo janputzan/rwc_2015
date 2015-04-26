@@ -45,7 +45,8 @@
 			}
 
 
-			$response = array('year' => $cup->year,
+			$response = array('id' => $cup->id,
+								'year' => $cup->year,
 								'host' => $cup->host,
 								'final' => $final,
 								'third_place' => $third_place,
@@ -86,7 +87,8 @@
 			}
 
 
-			array_push($response, array('year' => $cup->year,
+			array_push($response, array('id' => $cup->id,
+								'year' => $cup->year,
 								'host_country' => $cup->host,
 								'final' => $final,
 								'third_place' => $third_place,

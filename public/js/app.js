@@ -91,6 +91,8 @@ function showTeams(data) {
 
 		var that = $(this);
 
+		/* register hover event handlers */
+
 		card.hover(function() {
 
 			$(this).find('.name-hover').show();
@@ -146,9 +148,6 @@ function showInfo(data) {
 
 	var stats = getStats(data[0].id);
 
-
-	
-
 	container.appendTo('#sideContent');
 	// resultsContainer.appendTo('#sideContent');
 }
@@ -161,25 +160,34 @@ function getStats(id) {
 		type: 'GET',
 		success: function(data) {
 
-			var resultsContainer = $('<div class="resultsContainer"><p>Previous Word Cup Appearances:</p></div>');
+			var resultsContainer = $('<div class="resultsContainer teams"><p>Previous Word Cup Appearances:</p></div>');
 
 			if (data.length > 0 ) {
 
 				$(data).each(function() {
 
 
-					var results = $('<div class="results">'
-										+ '<p><span>'
-										+ $(this)[0].against
-										+ '</span><span>('
-										+ $(this)[0].cup
-										+ ')</span></p>'
-										+ '<p class="score '
+					var results = $('<div class="results '
 										+ $(this)[0].result
 										+ '">'
+										+ '<p><span>'
+										+ $(this)[0].against
+										+ '</span ><span>('
+										+ $(this)[0].cup
+										+ ')</span> <span>'
 										+ $(this)[0].score
-										+ '</p>'
-										+ '</div></div>');
+										+ '</span><span class="hide-me">'
+										+ $(this)[0].result
+										+ '</span></p>'
+										+ '</div>');
+
+					/* register hover event handlers */
+
+					results.hover(function() {
+						$(this).find('.hide-me').show();
+					}, function() {
+						$(this).find('.hide-me').hide();
+					});
 
 					results.appendTo(resultsContainer);
 					
@@ -197,7 +205,6 @@ function getStats(id) {
 	});
 
 	return false;
-
 }
 
 function getCups() {
@@ -209,7 +216,9 @@ function getCups() {
 
 			showCups(data);
 		}
-	})
+	});
+
+	return false;
 }
 
 function showCups(data) {
@@ -218,37 +227,104 @@ function showCups(data) {
 
 	$(data).each(function() {
 
-		console.log($(this)[0]);
+		// console.log($(this)[0]);
 
 		var card = $('<div class="cups-card">' 
-				+ '<p><span>Year: '
+				+ '<p><span>'
 				+ $(this)[0].year
-				+ '</span> <span>Winner: '
-				+ $(this)[0].winner
-				+ '</p><p>Host: '
+				+ '</span></p><p><span>Host: '
 				+ $(this)[0].host_country
-				+ '</p><p>'
+				+ '</span></p><p><span>Winner: '
+				+ $(this)[0].winner
+				+ '</span></p>'
+				+ '<div class="info-hover"><p>Click for more info</p></div>'
 				+ '</div>');
 
 		var that = $(this);
 
-		// card.hover(function() {
+		/* register hover event handlers */
 
-		// 	$(this).find('.name-hover').show();
+		card.hover(function() {
 
-		// },function() {
+			$(this).find('.info-hover').show();
 
-		// 	$(this).find('.name-hover').hide();
-		// });
+		},function() {
 
-		// card.click(function() {
+			$(this).find('.info-hover').hide();
+		});
 
-		// 	showInfo(that);
-		// });
+		card.find('.info-hover').click(function() {
 
-		$('#mainContent').append(card);
+			getResults(that[0].id);
+		});
+
+		$('#mainContent').prepend(card);
 
 	});
 
+	return false;
+}
 
+function getResults(id) {
+
+	$.ajax({
+		url: 'scripts/getResults.php?cup_id=' + id,
+		type: 'GET',
+		success: function(data) {
+
+			showResults(data);
+		}
+	});
+
+	return false;
+}
+
+function showResults(data) {
+
+	$('#sideContent').children().remove();
+
+			// console.log($(this)[0]);
+
+	var container = $('<div class="cup-info">'
+					+ '<p><span>'
+					+ data[0].year
+					+ '</span></p><p><span>Host: '
+					+ data[0].host_country
+					+ '</span></p><p><span>Winner: '
+					+ data[0].winner
+					+ '</span></p><p><span>Second place: '
+					+ data[0].second
+					+ '</span></p><p><span>Third place: '
+					+ data[0].third
+					+ '</span></p></div>');
+
+	var resultsContainer = $('<div class="resultsContainer cups"><p>All Results:</p></div>');
+
+	if (data[1].length > 0 ) {
+
+		$(data[1]).each(function() {
+
+
+			var results = $('<div class="results">'
+								+ '<p><span>'
+								+ $(this)[0].h_team
+								+ '</span><span>vs</span><span>'
+								+ $(this)[0].a_team
+								+ '</span></p>'
+								+ '<p><span>'
+								+ $(this)[0].score
+								+ '</span></p></div>');
+			
+			results.appendTo(resultsContainer);
+		});
+
+	} else {
+
+		resultsContainer.append('<p>No results yet</p>');
+	}
+
+	$('#sideContent').prepend(container);
+	resultsContainer.appendTo('#sideContent');
+
+	return false;
 }
