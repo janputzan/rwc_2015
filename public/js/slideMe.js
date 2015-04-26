@@ -21,7 +21,7 @@
 
 		/*append controls div*/
 
-		this.append(controlsDiv); 
+		this.prepend(controlsDiv); 
 
 		/* Event handlers */
 

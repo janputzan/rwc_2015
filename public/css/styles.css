@@ -1,13 +1,21 @@
 body {
 	font-family: Abel
 }
+
 .left-side {
 	height: 90vh;
 	background-color: #2F8CC7;
 }
+.center-side {
+	position: relative;
+	max-height: 90vh;
+}
 .right-side {
 	height: 90vh;
 	background-color: #13AE5B;
+	position: absolute;
+	right: 0;
+	display: none;
 }
 
 nav {
@@ -42,7 +50,9 @@ nav ul a {
 }
 .slideMe {
 	position: relative;
-	top: 30px;
+	max-height: 750px;
+	overflow: hidden;
+	cursor: pointer;
 }
 .slideMe > img {
 	width: 100%;
@@ -74,14 +84,26 @@ nav ul a {
 
 #preloader div {
 	position: relative;
-	top: 35vh;
+	top: 15vh;
 	left: 45vw;
+}
+#preloader div > p {
+	width: 150px;
+	text-align: center;
+}
+#preloader div > p:first-child {
+
+	font-size: x-large;
+}
+#preloader img {
+	position: relative;
+	left: 20px;
 }
 
 #preloader2 {
 	position: absolute;
 	display: none;
-	top: 30%;
+	top: 50%;
 	left: 40%;
 }
 
@@ -112,6 +134,11 @@ nav ul a {
 	padding-top: 15px;
 	overflow-y: auto;
 	height: 95%;
+}
+
+#sideContent > p {
+	font-size: large;
+	color: #fff;
 }
 
 .info-container {
@@ -203,9 +230,6 @@ nav ul a {
 	font-size: small;
 }
 
-.slideMe {
-	cursor: pointer;
-}
 
 .cups-card {
 
@@ -312,3 +336,53 @@ nav ul a {
 	
 	font-size: x-large; 
 }
+
+.trigger-side {
+	position: absolute;
+	color: #000;
+	right: 20px;
+}
+
+.trigger-side > i:hover {
+	color: #1E8BC3;
+}
+
+.pool-card {
+	width: 250px;
+	display: inline-block;
+	margin: 7px;
+	height: 240px;
+	border: solid 1px #1E8BC3;
+}
+
+.pool-card  p {
+	text-align: center;
+	height: 40px;
+	margin: 0px;
+	cursor: pointer;
+}
+
+.pool-card > p:first-child {
+
+	font-size: x-large;
+	color: #fff;
+	background-color: #1E8BC3;
+}
+
+.pool-card > div > p > span {
+
+	position: relative;
+	top: 10px;
+}
+
+
+.pool-card > div > p:nth-child(odd) {
+
+	background-color: rgba(46, 204, 113, 0.5);
+}
+
+.pool-card > div > p:hover {
+
+	background-color: rgba(46, 204, 113, 0.2);
+}
+

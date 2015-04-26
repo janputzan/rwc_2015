@@ -12,6 +12,7 @@ $(document).ready(function() {
 
 	preloader.show().delay(2000).fadeOut(2000);
 
+
 });
 
 function getTeams(id) {
@@ -39,7 +40,10 @@ function setPagesEvents() {
 	navs.find('a').click(function(e) {
 
 		navs.find('li').removeClass('active');
-		$(this).parent().addClass('active');
+
+		navs.find('[data-page="' + $(this).data('page') + '"]').parent().addClass('active');
+
+		toggleRightSide('hide');
 
 		e.preventDefault();
 
@@ -52,7 +56,7 @@ function setPagesEvents() {
 				break;
 			case 'pools':
 				preloader2.show();
-				// getCups();
+				getPools();
 				preloader2.fadeOut(500);
 				break;
 			case 'teams':
@@ -69,6 +73,13 @@ function setPagesEvents() {
 				break;
 		}
 	});
+
+	$('.trigger-side').find('i').click(function() {
+
+		toggleRightSide();
+	});
+
+	return false;
 }
 
 function showTeams(data) {
@@ -105,18 +116,19 @@ function showTeams(data) {
 		card.click(function() {
 
 			showInfo(that);
+			toggleRightSide('show');
 		});
 
 		$('#mainContent').append(card);
 
 	});
 
-
+	return false;
 }
 
 function showContent() {
 
-	var slides = $('<div id="slideMe" class="col s12 m12 l12 slideMe"></div>');
+	var slides = $('<div id="slideMe" class="col s12 m12 l12 slideMe valign"></div>');
 
 	for (var i = 1; i < 6; i++) {
 
@@ -126,6 +138,7 @@ function showContent() {
 
 	slides.slideMe().appendTo('#mainContent');
 
+	return false;
 }
 
 function showInfo(data) {
@@ -150,6 +163,8 @@ function showInfo(data) {
 
 	container.appendTo('#sideContent');
 	// resultsContainer.appendTo('#sideContent');
+
+	return false;
 }
 
 function getStats(id) {
@@ -256,6 +271,7 @@ function showCups(data) {
 		card.find('.info-hover').click(function() {
 
 			getResults(that[0].id);
+			toggleRightSide('show');
 		});
 
 		$('#mainContent').prepend(card);
@@ -327,4 +343,125 @@ function showResults(data) {
 	resultsContainer.appendTo('#sideContent');
 
 	return false;
+}
+
+function toggleRightSide(trigger) {
+
+	var _trigger = trigger ? trigger : null;
+
+	var rightSide = $('.right-side');
+
+	var center = $('.center-side');
+
+	if (!trigger) {
+
+		if (rightSide.css('display') == 'none') {
+
+			rightSide.show('slide', { direction: 'right' }, 500);
+			center.switchClass( 's10 m10 l10', 's7 m7 l7', 500, 'easeInOutQuad' );
+		
+		} else {
+
+			center.switchClass('s7 m7 l7', 's10 m10 l10', 500, 'easeInOutQuad' );
+			rightSide.hide('slide', { direction: 'right' }, 500);
+		}
+		
+	} else if (trigger == 'show') {
+
+		if (rightSide.css('display') == 'none') {
+
+			rightSide.show('slide', { direction: 'right' }, 500);
+			center.switchClass( 's10 m10 l10', 's7 m7 l7', 500, 'easeInOutQuad' );
+		}
+	
+	} else if (trigger == 'hide') {
+
+		if (rightSide.css('display') != 'none') {
+
+			center.switchClass('s7 m7 l7', 's10 m10 l10', 500, 'easeInOutQuad' );
+			rightSide.hide('slide', { direction: 'right' }, 500);
+		}
+	}
+
+
+	return false;
+}
+
+function getPools() {
+
+	$.ajax({
+		url: 'scripts/getPools.php',
+		type: 'GET',
+		success: function(data) {
+
+			showPools(data);
+		}
+	});
+
+	return false;
+}
+
+function showPools(data) {
+
+	// console.log(data);
+
+	$('#mainContent').children().remove();
+
+	var pool_a = $('<div class="pool-card"></div>');
+	var pool_b = $('<div class="pool-card"></div>');
+	var pool_c = $('<div class="pool-card"></div>');
+	var pool_d = $('<div class="pool-card"></div>');
+
+	populatePool(data.A, pool_a, 'A');
+	
+	pool_a.appendTo('#mainContent');
+
+	populatePool(data.B, pool_b, 'B');
+	
+	pool_b.appendTo('#mainContent');
+
+	populatePool(data.C, pool_c, 'C');
+	
+	pool_c.appendTo('#mainContent');
+
+	populatePool(data.D, pool_d, 'D');
+	
+	pool_d.appendTo('#mainContent');
+
+
+	return false;
+}
+
+function populatePool(data, element, pool) {
+
+	element.append(getPoolTitle(pool));
+
+	var card = $('<div class="pool-teams"></div>');
+
+	$(data).each(function() {
+
+		var team = $('<p><span>'
+					+ $(this)[0].name
+					+ '</span></p>');
+
+		var that = $(this);
+
+		team.click(function() {
+
+			showInfo(that);
+			toggleRightSide('show');
+			
+		});
+
+		team.appendTo(card);
+	});
+
+	card.appendTo(element);
+
+	return false;
+}
+
+function getPoolTitle(pool) {
+
+	return $('<p><span>Pool ' + pool + '</span></p>');
 }
