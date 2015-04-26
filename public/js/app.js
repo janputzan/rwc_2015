@@ -69,6 +69,11 @@ function setPagesEvents() {
 				getCups();
 				preloader2.fadeOut(500);
 				break;
+			case 'fixtures':
+				preloader2.show();
+				getFixtures();
+				preloader2.fadeOut(500);
+				break;
 			default:
 				break;
 		}
@@ -176,6 +181,7 @@ function getStats(id) {
 		success: function(data) {
 
 			var resultsContainer = $('<div class="resultsContainer teams"><p>Previous Word Cup Appearances:</p></div>');
+			var fixturesContainer = $('<div class="fixturesContainer cups"><p>Upcoming Fixtures:</p></div>');
 
 			if (data.length > 0 ) {
 
@@ -213,7 +219,9 @@ function getStats(id) {
 				resultsContainer.append('<p>No previous results</p>');
 			}
 
+			fixturesContainer.appendTo('#sideContent');
 
+			getTeamFixtures(id);
 
 			resultsContainer.appendTo('#sideContent');
 		}
@@ -315,6 +323,7 @@ function showResults(data) {
 					+ '</span></p></div>');
 
 	var resultsContainer = $('<div class="resultsContainer cups"><p>All Results:</p></div>');
+
 
 	if (data[1].length > 0 ) {
 
@@ -464,4 +473,93 @@ function populatePool(data, element, pool) {
 function getPoolTitle(pool) {
 
 	return $('<p><span>Pool ' + pool + '</span></p>');
+}
+
+function getFixtures(pool, team_id) {
+
+	var _url = 'scripts/getFixtures.php';
+
+	if (pool) {
+
+		_url += '?pool=' + pool;
+
+	} else if (team_id) {
+
+		_url += '?team_id=' + team_id;
+	}
+
+	$.ajax({
+		url: _url,
+		type: 'GET',
+		success: function(data) {
+
+			showFixtures(data);
+		}
+	});
+
+	return false;
+}
+
+function showFixtures(data) {
+
+	$('#mainContent').children().remove();
+
+	$(data).each(function() {
+
+		var card = $('<div class="fixture-card"><p><span>'
+					+ $(this)[0].h_team
+					+ '</span><span>vs</span><span>'
+					+ $(this)[0].a_team
+					+ '</span></p><p><span>'
+					+ $(this)[0].date
+					+ '</span></p>'
+					+ '</div>');
+
+		card.appendTo('#mainContent'); 
+	});
+
+	return false;
+}
+
+function getTeamFixtures(team_id) {
+
+	var _url = 'scripts/getFixtures.php?team_id=' + team_id;
+
+	$.ajax({
+		url: _url,
+		type: 'GET',
+		success: function(data) {
+
+			showTeamFixtures(data);
+		}
+	});
+
+	return false;
+}
+
+function showTeamFixtures(data) {
+
+	if (data.length) {
+
+		$(data).each(function() {
+
+			var card = $('<div class="fixture-info"><p><span>'
+						+ $(this)[0].h_team
+						+ '</span><span>vs</span><span>'
+						+ $(this)[0].a_team
+						+ '</span></p><p><span>'
+						+ $(this)[0].date
+						+ '</span></p>'
+						+ '</div>');
+
+			card.appendTo('.fixturesContainer');
+		});
+	
+	} else {
+
+		$('.fixturesContainer').remove();
+	}
+
+
+	return false;
 }

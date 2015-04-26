@@ -127,7 +127,10 @@ nav ul a {
 	padding: 5px;
 	cursor: pointer;
 }
-
+#mainContent {
+	overflow-y: auto; 
+	height: 80vh;
+}
 #sideContent {
 	position: relative;
 	top: 10px;
@@ -156,8 +159,7 @@ nav ul a {
 
 .resultsContainer > p:first-child {
 
-	font-size: medium;
-	font-weight: bold;
+	font-size: large;
 	color: #fff;
 }
 
@@ -386,3 +388,55 @@ nav ul a {
 	background-color: rgba(46, 204, 113, 0.2);
 }
 
+.fixture-card {
+	display: inline-block;
+}
+.fixture-card {
+	width: 200px;
+	height: 50px;
+	border: solid 1px #1E8BC3;
+	margin: 5px;
+}
+
+.fixture-card > p > span {
+	padding-left: 5px;
+}
+
+.fixture-card > p  {
+	text-align: center;
+	margin: 0;
+
+}
+
+.fixture-card > p:first-child {
+	background-color: #1E8BC3;
+	color: #fff;
+}
+
+.fixture-info {
+	height: 45px;
+	margin-bottom: 5px;
+}
+
+.fixture-info > p {
+
+	margin: 0;
+	color: #fff;
+	text-align: center;
+	background-color: rgba(25, 181, 254, 0.5); 
+}
+
+.fixture-info > p:last-child {
+	color: #000;
+	font-size: small;
+}
+
+.fixture-info > p > span {
+	padding-left: 5px;
+}
+
+.fixturesContainer > p {
+
+	font-size: large;
+	color: #fff;
+} 
