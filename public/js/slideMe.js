@@ -1,3 +1,15 @@
+/**
+ * SlideMe v1.x
+ * ======================
+ *
+ * SlideMe is a simple gallery slider.
+ *
+ * @author Jan Putzan
+ * @author Email: jan.putza@gmail.com
+ * @author GitHub: https://github.com/janputzan
+ *
+ */
+
 (function($) {
 
 	$.fn.slideMe = function(options) {
