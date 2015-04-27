@@ -15,22 +15,34 @@ $(document).ready(function() {
 
 });
 
-function getTeams(id) {
-
-	var team_id = id ? '?team_id=' + id : '';
+function getTeams() {
 
 	$.ajax({
-		url: 'scripts/showTeams.php' + team_id,
+		url: 'scripts/showTeams.php',
 		type: 'GET',
 		success: function(data) {
 			
-			// $(data).each(function() {
-
-				showTeams(data);
-			// });
+			showTeams(data);
 
 		}
 	})
+	return false;
+}
+
+function getTeam(id) {
+
+	$.ajax({
+		url: 'scripts/showTeams.php?team_id=' + id,
+		type: 'GET',
+		success: function(data) {
+			// console.log(data);
+			showTeamInfo(data);
+			toggleRightSide('show');
+
+		}
+	});
+
+	return false;
 }
 
 function setPagesEvents() {
@@ -502,21 +514,41 @@ function getFixtures(pool, team_id) {
 
 function showFixtures(data) {
 
-	$('#mainContent').children().remove();
+	$('#mainContent').children().not('.filterContainer').remove();
+
+	$('#preloader2').show();
 
 	$(data).each(function() {
 
-		var card = $('<div class="fixture-card"><p><span>'
+		// console.log($(this)[0]);
+
+		var card = $('<div class="fixture-card"><p><span data-teamid="'
+					+ $(this)[0].h_team_id
+					+ '">'
 					+ $(this)[0].h_team
-					+ '</span><span>vs</span><span>'
+					+ '</span> vs <span data-teamid="'
+					+ $(this)[0].a_team_id
+					+ '">'
 					+ $(this)[0].a_team
 					+ '</span></p><p><span>'
 					+ $(this)[0].date
 					+ '</span></p>'
 					+ '</div>');
 
-		card.appendTo('#mainContent'); 
+		var that = $(this);
+
+		card.find('p').first().find('span').click(function() {
+
+			getTeam($(this).data('teamid'));
+		});
+
+
+		card.appendTo('#mainContent');
 	});
+
+	showFilters();
+
+	$('#preloader2').fadeOut(1000);
 
 	return false;
 }
@@ -562,4 +594,97 @@ function showTeamFixtures(data) {
 
 
 	return false;
+}
+
+function showTeamInfo(data) {
+
+
+	$('#sideContent').children().remove();
+
+	var container = $('<div class="team-info">'
+					+ '<div class="image-container"><img src="public/img/'
+					+ data.logo_url
+					+ '"></div>'
+					+ '<div class="info-container">'
+					+ '<p>'
+					+ data.name
+					+ '</p>'
+					+ '<p>'
+					+ data.info
+					+ '</p>'
+					+ '</div></div>');
+
+	var stats = getStats(data.id);
+
+	container.appendTo('#sideContent');
+	// resultsContainer.appendTo('#sideContent');
+
+	return false;
+}
+
+function showFilters() {
+
+	if ($('.filterContainer').length == 0) {
+
+		var filterContainer = $('<div class="filterContainer"><p>Filter Fixtures by Team: <b></b></p><span>reset filters</span></div>');
+
+		var teamsFilter = $('<div class="teamsFilter"></div>');
+
+		filterContainer.find('span').click(function() {
+
+			getFixtures();
+			$('.filterContainer').find('b').text('');
+			$('.teamsFilter').find('.checked').removeClass('checked');
+		});
+
+		$.ajax({
+			url: 'scripts/showTeams.php',
+			type: 'GET',
+			success: function(data) {
+				
+				$(data).each(function() {
+
+					if ($(this)[0].pool) {
+
+						var team = $('<div><img src="public/img/'
+									+ $(this)[0].logo_url
+									+ '"><p>'
+									+ $(this)[0].name
+									+ '</p></div>');
+
+						var that = $(this);
+
+						team.hover(function() {
+
+							$(this).find('p').show();
+
+						}, function() {
+
+							$(this).find('p').hide();
+						});
+
+						team.click(function() {
+
+							getFixtures(null, that[0].id);
+
+							$('.filterContainer').find('b').text(that[0].name);
+
+							$('.teamsFilter').find('.checked').removeClass('checked');
+
+							$(this).addClass('checked');
+						});
+
+						team.appendTo(teamsFilter);
+					}
+
+				});
+
+			}
+		});
+
+		teamsFilter.appendTo(filterContainer);
+
+		filterContainer.prependTo('#mainContent');
+	}
+
 }

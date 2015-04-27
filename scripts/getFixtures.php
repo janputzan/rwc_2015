@@ -22,6 +22,8 @@
 
 			array_push($response, array('h_team' => $teamModel->findOne($fix->h_team_id)->name,
 										'a_team' => $teamModel->findOne($fix->a_team_id)->name,
+										'h_team_id' => $teamModel->findOne($fix->h_team_id)->id,
+										'a_team_id' =>$teamModel->findOne($fix->a_team_id)->id,
 										'date' => $fix->date));
 		}
 
@@ -31,6 +33,8 @@
 
 			array_push($response, array('h_team' => $teamModel->findOne($fix->h_team_id)->name,
 										'a_team' => $teamModel->findOne($fix->a_team_id)->name,
+										'h_team_id' => $teamModel->findOne($fix->h_team_id)->id,
+										'a_team_id' =>$teamModel->findOne($fix->a_team_id)->id,
 										'date' => $fix->date));
 		}		
 
@@ -42,6 +46,8 @@
 
 			array_push($response, array('h_team' => $teamModel->findOne($fix->h_team_id)->name,
 										'a_team' => $teamModel->findOne($fix->a_team_id)->name,
+										'h_team_id' => $teamModel->findOne($fix->h_team_id)->id,
+										'a_team_id' =>$teamModel->findOne($fix->a_team_id)->id,
 										'date' => $fix->date));
 		}		
 	
@@ -53,6 +59,8 @@
 
 			array_push($response, array('h_team' => $teamModel->findOne($fix->h_team_id)->name,
 										'a_team' => $teamModel->findOne($fix->a_team_id)->name,
+										'h_team_id' => $teamModel->findOne($fix->h_team_id)->id,
+										'a_team_id' =>$teamModel->findOne($fix->a_team_id)->id,
 										'date' => $fix->date));
 		}
 	}
