@@ -86,6 +86,13 @@ function setPagesEvents() {
 				getFixtures();
 				preloader2.fadeOut(500);
 				break;
+			case 'stats':
+				$('#mainContent').children().remove();
+				preloader2.show();
+				loadChartFilters();
+				// getChartData(1);
+				preloader2.fadeOut(500);
+				break;
 			default:
 				break;
 		}
@@ -687,4 +694,126 @@ function showFilters() {
 		filterContainer.prependTo('#mainContent');
 	}
 
+}
+
+function initChart(data) {
+
+	var options = {barValueSpacing : 1, scaleBeginAtZero : true, scaleShowGridLines : true};
+
+	$('#bar-chart').remove();
+
+	var canvas = $('<canvas id="bar-chart"></canvas>');
+	canvas.css({height: 400, width: 800});
+	$('#mainContent').append(canvas);
+
+	var ctx = document.getElementById('bar-chart').getContext('2d');
+	var barChart = new Chart(ctx).Bar(data, options);
+
+
+}
+
+function getChartData(id) {
+
+	var url = 'scripts/getChartData.php?team_id=' + id;
+
+	$.ajax({
+		url: url,
+		type: 'GET',
+		success: function(data) {
+
+			var labels = [];
+			var won = [];
+			var lost = [];
+			var drawn = [];
+
+			$(data).each(function() {
+				labels.push($(this)[0].year);
+				won.push($(this)[0].results.won);
+				lost.push($(this)[0].results.lost);
+				drawn.push($(this)[0].results.drawn);
+			});
+console.log(won, lost, drawn);
+			var _data = {
+
+				labels : labels,
+				datasets: [
+					{
+						label: "Won",
+						fillColor: "#2ECC71",
+			            data: won
+					},
+					{
+						label: "Lost",
+						fillColor: "#E74C3C",
+			            data: lost
+					},
+					{
+						label: "Drawn",
+						fillColor: "#87D37C",
+			            data: drawn
+					}]
+			};
+
+			initChart(_data);
+
+		} 
+	})
+
+	return false;
+}
+
+function loadChartFilters() {
+
+	if ($('.filterContainer').length == 0) {
+
+		var filterContainer = $('<div class="filterContainer"><p>Show stats for a Team: <b></b></p></div>');
+
+		var teamsFilter = $('<div class="teamsFilter"></div>');
+
+		$.ajax({
+			url: 'scripts/showTeams.php',
+			type: 'GET',
+			success: function(data) {
+				
+				$(data).each(function() {
+
+					var team = $('<div><img src="public/img/'
+								+ $(this)[0].logo_url
+								+ '"><p>'
+								+ $(this)[0].name
+								+ '</p></div>');
+
+					var that = $(this);
+
+					team.hover(function() {
+
+						$(this).find('p').show();
+
+					}, function() {
+
+						$(this).find('p').hide();
+					});
+
+					team.click(function() {
+
+						getChartData(that[0].id);
+
+						$('.filterContainer').find('b').text(that[0].name);
+
+						$('.teamsFilter').find('.checked').removeClass('checked');
+
+						$(this).addClass('checked');
+					});
+
+					team.appendTo(teamsFilter);
+
+				});
+
+			}
+		});
+
+		teamsFilter.appendTo(filterContainer);
+
+		filterContainer.prependTo('#mainContent');
+	}
 }
